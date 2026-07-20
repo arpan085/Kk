@@ -1,0 +1,120 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import {
+  ArrowLeft,
+  Wallet,
+  ArrowUpRight,
+  ArrowDownLeft,
+  Plus,
+  History,
+} from 'lucide-react';
+
+const WalletPage = () => {
+  const [showAddMoney, setShowAddMoney] = useState(false);
+
+  const transactions = [
+    { id: 1, type: 'credit', amount: 5000, description: 'Added via eSewa', date: 'Today', time: '2:30 PM' },
+    { id: 2, type: 'debit', amount: 1200, description: 'Plumbing Service', date: 'Yesterday', time: '4:15 PM' },
+    { id: 3, type: 'debit', amount: 2000, description: 'Home Cleaning', date: 'Dec 10', time: '11:00 AM' },
+    { id: 4, type: 'credit', amount: 3000, description: 'Added via Khalti', date: 'Dec 8', time: '9:45 AM' },
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-50 pt-20 pb-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-8">
+          <Link to="/dashboard" className="p-2 bg-white rounded-xl hover:bg-slate-100">
+            <ArrowLeft className="w-5 h-5 text-slate-600" />
+          </Link>
+          <div>
+            <h1 className="text-2xl font-bold text-[#0F172A]">My Wallet</h1>
+            <p className="text-slate-500">Manage your wallet and transactions</p>
+          </div>
+        </div>
+
+        {/* Balance Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-r from-[#0F172A] to-slate-800 rounded-2xl p-8 text-white mb-8"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-slate-400 mb-1">Available Balance</p>
+              <p className="text-4xl font-bold">Rs. 2,500</p>
+            </div>
+            <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center">
+              <Wallet className="w-8 h-8" />
+            </div>
+          </div>
+          <div className="flex gap-4 mt-8">
+            <button
+              onClick={() => setShowAddMoney(true)}
+              className="flex items-center gap-2 px-6 py-3 bg-[#3B82F6] rounded-xl font-medium hover:bg-[#2563EB] transition-colors"
+            >
+              <Plus className="w-5 h-5" />
+              Add Money
+            </button>
+            <button className="flex items-center gap-2 px-6 py-3 bg-white/10 rounded-xl font-medium hover:bg-white/20 transition-colors">
+              <ArrowUpRight className="w-5 h-5" />
+              Withdraw
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Quick Stats */}
+        <div className="grid sm:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <p className="text-sm text-slate-500 mb-1">Total Added</p>
+            <p className="text-2xl font-bold text-green-600">Rs. 15,000</p>
+          </div>
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <p className="text-sm text-slate-500 mb-1">Total Spent</p>
+            <p className="text-2xl font-bold text-[#0F172A]">Rs. 12,500</p>
+          </div>
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <p className="text-sm text-slate-500 mb-1">Cashback Earned</p>
+            <p className="text-2xl font-bold text-amber-500">Rs. 250</p>
+          </div>
+        </div>
+
+        {/* Transaction History */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <History className="w-5 h-5 text-slate-400" />
+              <h2 className="font-semibold text-[#0F172A]">Transaction History</h2>
+            </div>
+            <button className="text-sm text-[#3B82F6] hover:underline">View All</button>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {transactions.map((transaction) => (
+              <div key={transaction.id} className="p-6 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                    transaction.type === 'credit' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+                  }`}>
+                    {transaction.type === 'credit' ? <ArrowDownLeft className="w-6 h-6" /> : <ArrowUpRight className="w-6 h-6" />}
+                  </div>
+                  <div>
+                    <p className="font-medium text-[#0F172A]">{transaction.description}</p>
+                    <p className="text-sm text-slate-500">{transaction.date} at {transaction.time}</p>
+                  </div>
+                </div>
+                <p className={`font-semibold ${
+                  transaction.type === 'credit' ? 'text-green-600' : 'text-[#0F172A]'
+                }`}>
+                  {transaction.type === 'credit' ? '+' : '-'}Rs. {transaction.amount}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default WalletPage;
